@@ -1,64 +1,120 @@
-package HomeWork2;
+package lesson3;
 
-import java.io.*;
-import java.util.Scanner;
+import com.google.common.collect.HashMultiset;
+import com.google.common.collect.Multiset;
+import com.google.common.collect.Multisets;
 
-/*1. Напишите метод, который принимает на вход строку (String) и
-определяет является ли строка палиндромом (возвращает boolean значение).*/
+import java.util.*;
+
 public class Main {
+
+    private static final String[] solarSystemPlanets =
+            new String[]{"Mercury", "Venus", "Earth", "Mars", "Jupiter", "Saturn", "Uranus", "Neptune"};
+    private static Random rand = new Random();
+
+
     public static void main(String[] args) {
-        hw1();
-        write();
+//        ex0();
+//        ex2_1();
+//        ex2_2();
+//        ex2_3();
+        ex2_4();
     }
 
-    public static void hw1() {
-        Scanner scan = new Scanner(System.in);
-        System.out.println("Введите строку: ");
-        String string = scan.next();
+    private static void ex0() {
+        String s1 = "hello";
+        String s2 = "hello";
+        String s3 = s1;
+        String s4 = "h" + "e" + "l" + "l" + "o";
+        String s5 = new String("hello");
+        String s6 = new String(new char[]{'h', 'e', 'l', 'l', 'o'});
 
-        string = string.replaceAll("[^A-Za-zА-Яа-я0-9]", "");
-        if (string.equalsIgnoreCase((new StringBuilder(string))
-                .reverse()
-                .toString()))
-            System.out.println("Палиндром! " + string);
-        else
-            System.out.println("Не палиндром! :( " + string);
+
+        System.out.println(s1 == s2);
+        System.out.println(s1 == s3);
+        System.out.println(s1 == s4);
+        System.out.println(s1 == s5);
+        System.out.println(s1 == s6);
+
+        System.out.println(s1.equals(s2));
+        System.out.println(s1.equals(s3));
+        System.out.println(s1.equals(s4));
+        System.out.println(s1.equals(s5));
+        System.out.println(s1.equals(s6));
     }
 
-/*2. Напишите метод, который составит строку, состоящую из 100 повторений слова TEST
-и метод, который запишет эту строку в простой текстовый файл, обработайте исключения.*/
+    public static void ex2_1() {
+        List<String> planets = new ArrayList<>();
 
-    public static StringBuilder test(String str) {
-//        var s = "TEST".repeat(100);
-//        System.out.println(s);
-
-        StringBuilder result = new StringBuilder();
         for (int i = 0; i < 100; i++) {
-            //String str = "TEST";
-            result.append(str);
+            int randIndex = rand.nextInt(solarSystemPlanets.length);
+            planets.add(solarSystemPlanets[randIndex]);
         }
-        System.out.println(result);
-        return result;
-//        return s;
+
+        for (String planet : solarSystemPlanets) {
+            System.out.printf("%s\t%s%n", planet, Collections.frequency(planets, planet));
+        }
     }
 
-        public static void write () {
-            {
-                File file = new File("file.txt");
-                String text = String.valueOf(test("TEST"));
+    private static void ex2_2() {
+        List<String> planets = new ArrayList<>();
 
-                try (FileWriter fw = new FileWriter(file);
-                     BufferedWriter bf = new BufferedWriter(fw);
-                     PrintWriter out = new PrintWriter(bf)) {
-                    out.print(text);
+        for (int i = 0; i < 11; i++) {
+            int randIndex = rand.nextInt(solarSystemPlanets.length);
+            planets.add(solarSystemPlanets[randIndex]);
+        }
 
-                    System.out.println("Successfully written data to the file");
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+        Collections.sort(planets);
+        System.out.println(planets);
+
+        String prevPlanet = planets.get(0);
+        String planet = planets.get(0);
+        int count = 1;
+        for (int i = 1; i < planets.size(); i++) {
+            planet = planets.get(i);
+            if (!planet.equals(prevPlanet)) {
+
+                System.out.println(prevPlanet + " " + count);
+                prevPlanet = planet;
+                count = 0;
             }
-
+            count++;
         }
 
-
+        System.out.println(planet + " " + count);
     }
+
+
+    private static void ex2_3() {
+        List<String> planets = new ArrayList<>();
+        HashMap<String, Integer> planetCount = new HashMap<>();
+
+        for (int i = 0; i < 100; i++) {
+            int randIndex = rand.nextInt(solarSystemPlanets.length);
+            planets.add(solarSystemPlanets[randIndex]);
+        }
+
+        for (String planet : planets) {
+            if (planetCount.containsKey(planet)) {
+                planetCount.put(planet, planetCount.get(planet) + 1);
+            } else {
+                planetCount.put(planet, 1);
+            }
+        }
+
+        for (String planet : planetCount.keySet()) {
+            System.out.printf("%s\t%s%n", planet, planetCount.get(planet));
+        }
+    }
+
+    private static void ex2_4() {
+        Multiset<String> planets = HashMultiset.create();
+
+        for (int i = 0; i < 100; i++) {
+            int randIndex = rand.nextInt(solarSystemPlanets.length);
+            planets.add(solarSystemPlanets[randIndex]);
+        }
+
+        System.out.println(planets);
+    }
+}
